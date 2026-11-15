@@ -1,0 +1,58 @@
+# Example part: a small mounting bracket.
+# Datums A (base face), B (side face) and C (front face) set the frame.
+name = "demo-bracket"
+units = "mm"
+
+[[features]]
+id = "A"
+type = "datum"
+
+[[features]]
+id = "B"
+type = "datum"
+
+[[features]]
+id = "C"
+type = "datum"
+
+# Flatness of the top pad, minimum zone.
+[[features]]
+id = "top_face"
+type = "flatness"
+tolerance = 0.05
+
+# Rear face must stay square to datum A.
+[[features]]
+id = "rear_face"
+type = "perpendicularity"
+tolerance = 0.10
+datums = ["A"]
+
+# Mounting hole with MMC: the hole gets bonus tolerance as it grows past 9.9 mm.
+[[features]]
+id = "H1"
+type = "position"
+size_kind = "hole"
+tolerance = 0.25
+datums = ["A", "B", "C"]
+material_condition = "MMC"
+mmc_size = 9.9
+nominal = [-20.0, 15.0]
+
+# Second hole, regardless of feature size.
+[[features]]
+id = "H2"
+type = "position"
+size_kind = "hole"
+tolerance = 0.10
+datums = ["A", "B", "C"]
+material_condition = "RFS"
+nominal = [-10.0, 15.0]
+
+# Pad surface profile, bilateral about datum A.
+[[features]]
+id = "pad_profile"
+type = "profile"
+tolerance = 0.10
+datums = ["A"]
+nominal_height = 0.0
