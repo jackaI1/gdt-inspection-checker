@@ -1,8 +1,10 @@
 # gdt-inspection-checker
 
-I built a Python tool that checks a measured part against its drawing's tolerances because checking datums, position and flatness by hand is slow, and it is easy to get the math wrong.
+I built a Python tool that checks whether a measured part is within the limits on its drawing, because working those limits out by hand is slow and easy to get wrong.
 
-A drawing does not only give sizes. It also says how straight a face must be, how square it must stand, and how far each hole can sit from its planned spot. These rules are called GD&T (geometric dimensioning and tolerancing). To check a real part, someone measures points on it, works out a reference frame from three faces called datums A, B and C, and then does the geometry for each rule. I wanted a tool that does all of that the same way every time, and that tells me pass or fail for each feature.
+Engineering drawings give more than sizes. They also say how flat a face must be, how square it must stand, and how far each hole can sit from its planned spot. These rules are called GD&T (geometric dimensioning and tolerancing). To check a real part, someone touches points on it, lines it up on three reference faces (called datums A, B and C), and then does the geometry for each rule. This tool does those steps the same way every time and tells me pass or fail for each feature.
+
+This is a personal project. I use it to check my own hand calculations on a small example bracket, and to practise reading drawings against measured data.
 
 ## What it does, in plain terms
 
@@ -78,16 +80,12 @@ The main parts are small and each one does one job.
 
 The test suite checks each piece against values I worked out by hand on paper. For example, the datum frame test shifts three planes by 10, 20 and 5 mm and checks that the origin moves by exactly that much.
 
-## What was built
+## Where the code is
 
-- `src/gdt_checker/geometry.py`: plane and circle fits, the datum frame, and the zone calculations.
-- `src/gdt_checker/checker.py`: reads the spec and the CSV, and checks every feature.
-- `src/gdt_checker/report.py`: writes the Markdown report and the PNG plot.
-- `src/gdt_checker/cli.py`: the `gdt-check` command.
+- `src/gdt_checker/`: the checker itself (geometry, spec reading, report and plot, command line).
 - `examples/`: the bracket spec, its measured points, and the report and plot it makes.
-- `tests/`: 20 tests, with hand-calculated expected values.
-- `docs/asme_y14_5.md`: which parts of the GD&T standard are implemented, how each is calculated, and what is left out.
-- `.github/workflows/tests.yml`: runs the tests and the example check on GitHub for every change.
+- `tests/`: 21 tests with hand-calculated expected values.
+- `docs/asme_y14_5.md`: the GD&T rules covered, how each is calculated, and what is left out.
 
 ## What it does not do
 
@@ -95,5 +93,5 @@ It does not cover every GD&T rule. Straightness, cylindricity, runout and other 
 
 ## Tests and CI
 
-- 20 unit tests, all passing locally with `pytest`.
+- 21 unit tests, all passing locally with `pytest`.
 - The GitHub Actions workflow runs the same tests on Python 3.12 on every pull request, then runs the example check and confirms that the report and plot are written.
