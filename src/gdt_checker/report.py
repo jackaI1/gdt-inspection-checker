@@ -47,7 +47,9 @@ def write_markdown(spec: Spec, results: list[Result], path: str | Path) -> None:
         "Margin is limit minus measured; negative means the feature is out of tolerance.",
         "",
     ]
-    Path(path).write_text("\n".join(lines), encoding="utf-8")
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("\n".join(lines), encoding="utf-8")
 
 
 def write_plot(
@@ -121,5 +123,7 @@ def write_plot(
     )
     fig.suptitle(f"{spec.name}: GD&T check")
     fig.tight_layout()
-    fig.savefig(path, dpi=130)
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(target, dpi=130)
     plt.close(fig)

@@ -22,3 +22,12 @@ def test_bad_input_exits_2(tmp_path, capsys):
     missing = tmp_path / "nope.toml"
     assert main([str(missing), str(EXAMPLES / "bracket_measurements.csv")]) == 2
     assert "error:" in capsys.readouterr().err
+
+
+def test_outputs_go_into_folders_that_do_not_exist_yet(tmp_path):
+    report = tmp_path / "new" / "nested" / "report.md"
+    plot = tmp_path / "new" / "plot.png"
+    code = main([str(EXAMPLES / "bracket_spec.toml"), str(EXAMPLES / "bracket_measurements.csv"),
+                 "--report", str(report), "--plot", str(plot)])
+    assert code == 1
+    assert report.exists() and plot.exists()
